@@ -1,0 +1,1 @@
+sudo docker run -it ps2-toolchain fish
