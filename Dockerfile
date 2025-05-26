@@ -3,14 +3,14 @@ FROM ps2dev/ps2dev:latest AS ps2
 FROM ubuntu:22.04
 
 ENV PS2DEV=/usr/local/ps2dev
-ENV WORKING_DIRECTORY=/root/dev
-ENV PS2TOOLCHAIN_REPO=https://github.com/ps2dev/ps2toolchain.git
-ENV PS2SDK=$PS2DEV/ps2sdk
-# ENV GSKIT $PS2DEV/gsKit
-ENV PATH=$PATH:${PS2DEV}/bin:${PS2DEV}/ee/bin:${PS2DEV}/iop/bin:${PS2DEV}/dvp/bin:${PS2SDK}/bin
-ENV PLATFORM=ps2
 
 COPY --from=ps2 $PS2DEV $PS2DEV
+
+ENV PS2SDK=$PS2DEV/ps2sdk
+ENV WORKING_DIRECTORY=/root/dev
+ENV GSKIT ${PS2DEV}/gsKit
+ENV PATH=$PATH:${PS2DEV}/bin:${PS2DEV}/ee/bin:${PS2DEV}/iop/bin:${PS2DEV}/dvp/bin:${PS2SDK}/bin
+ENV PLATFORM=ps2
 
 # Update
 RUN apt update && apt upgrade -y
@@ -38,6 +38,8 @@ end" >> /root/.config/fish/config.fish
 
 WORKDIR $WORKING_DIRECTORY
 
-RUN git clone $PS2TOOLCHAIN_REPO
+# ps2dev source
+ENV PS2DEV_REPO=https://github.com/ps2dev/ps2dev.git
+RUN git clone $PS2DEV_REPO
 
-WORKDIR ${WORKING_DIRECTORY}/ps2toolchain
+WORKDIR ${WORKING_DIRECTORY}
